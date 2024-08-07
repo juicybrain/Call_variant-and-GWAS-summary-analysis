@@ -1,0 +1,1 @@
+plink --bfile plink --cm-map ../1000GP_Phase3/1000GP_Phase3/genetic_map_chr1_combined_b37.txt 1 --make-bed --out new_bim
