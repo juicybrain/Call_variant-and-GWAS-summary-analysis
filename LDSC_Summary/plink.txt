@@ -1,0 +1,17 @@
+#   In order to estimate LD Scores, you need genotype data in the binary plink .bed/.bim/.fam format. We recommend using 1000 Genomes data from the appropriate continent, which can be downloaded in vcf format from the 1000 Genomes F     TP site and converted to plink format using the plink --vcf command.
+
+#   We recommend estimating LD Scores using a 1 centiMorgan (cM) window. Most .bim files have the cM column zeroed out, because plink doesn't actually use cM coordinates for anything. You can use the plink --cm-map flag along with y     our favorite genetic map (e.g., here) to fill in the cM column of your .bim file.
+
+### 1000 genome data
+wget https://ctg.cncr.nl/software/MAGMA/ref_data/g1000_eur.zip
+unzip g1000_eur.zip
+
+plink --bfile plink --cm-map ../1000GP_Phase3/1000GP_Phase3/genetic_map_chr1_combined_b37.txt 1 --make-bed --out new_bim
+python ~/git_repository/ldsc/ldsc.py --bfile g1000_eur --l2 --ld-wind-cm 1 --out g1000_eur.test --yes-really &
+### ldsc use Lung G4
+python ~/git_repository/ldsc/make_annot.py --bed-file ./SCLC_ip_peaks.bed --bimfile ./g1000_eur.bim --annot-file SCLC.lung.G4.annot.gz
+python ~/git_repository/ldsc/ldsc.py --l2  --bfile g1000_eur --ld-wind-cm 1 --annot SCLC.lung.G4.annot.gz --thin-annot --out SCLC.lung.G4 --print-snps SCLC.lung.G4.snp
+python ~/git_repository/ldsc/munge_sumstats.py --sumstats UKBB_body_BMIz.sumstats.gz --merge-alleles LDSCORE_w_hm3.snplist --out UKBB_body_BMI
+#### LDSC score test
+python ~/git_repository/ldsc/ldsc.py    --h2-cts UKBB_body_BMI.sumstats.gz     --ref-ld-chr 1000G_EUR_Phase3_baseline/baseline.     --out BMI_test     --ref-ld-chr-cts Cahoy.ldcts     --w-ld-chr weights_hm3_no_hla/weights.
+

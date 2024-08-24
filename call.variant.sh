@@ -1,5 +1,9 @@
 # alignment
 
+# prepare dict
+java -jar /home/yli/ref/picard/picard.jar  CreateSequenceDictionary     R=/home/yli/ref/genome/hgT2T/hgT2T.fa   O=/home/yli/ref/genome/hgT2T/hgT2T.dict
+
+
 for spl in  ...
 do
 
